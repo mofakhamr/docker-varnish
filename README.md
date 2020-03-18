@@ -2,8 +2,8 @@
 
 # Overview
 Varnish 4 had a syntax update (vcl_fetch is no longer), Fastly uses a heavily customized version 2.1 
-(https://www.fastly.com/blog/benefits-using-varnish)./
-In attempts to create a docker file for testing our fastly syntax, I found the following varnish 3.0.7 repo:
+(https://www.fastly.com/blog/benefits-using-varnish)
+In attempts to create a dockerfile for testing fastly syntax, I found the following varnish 3.0.7 repo:
 
 https://github.com/mobulum/docker-varnish/
 
@@ -11,7 +11,7 @@ That repo is now outdated as it uses an apt source - Varnish now host their own 
 http://varnish-cache.org/docs/trunk/installation/install_source.html) so this repo updates that file mostly.
 
 I ~~should probably~~ will contribute the changes back to the original repo but right now, I can start trying to test 
-v2.1 (or whatever version I choose - as long as I change the source)
+v2.1 (or whatever version I choose)
 
 ## Config
 In order to satisfy my use case (to connect to my host machine which runs my LNMP stack), I specified my docker bridge 
@@ -43,7 +43,8 @@ This repo contains different docker definitions for Varnish - I'm sure I could p
  `docker-compose up --build --force-recreate -d` 
  and get the version listed.
 
- Because they all run on port 8080, you can't run them at the same time.
+ Because they all run on port 8080, you can't currently run them at the same time (but that's easy enough to fix from the docker-compose file or run time override).
  
- 
+You'll get a dockerized Varnish that points to your host machine (instructions on docker->docker coming), the original repo did a good job of allowing customisations.
 
+Visit your host machine on port 8080, in my case all my sites are found under localhost, i.e. site1.localhost - so I just visit site1.localhost:8080 for the Varnished version, simple!
