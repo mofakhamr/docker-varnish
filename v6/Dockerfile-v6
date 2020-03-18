@@ -1,0 +1,50 @@
+FROM varnish:6.2
+
+#COPY default.vcl /etc/varnish
+
+ENV LISTEN_ADDR 0.0.0.0
+ENV LISTEN_PORT 8080
+
+ENV BACKEND_ENV_PORT 5000
+ENV BACKEND_PORT_5000_TCP_ADDR 0.0.0.0
+
+#ENV TELNET_ADDR 0.0.0.0
+#ENV TELNET_PORT 6083
+#ENV CACHE_SIZE 25MB
+#ENV THROTTLE_LIMIT 150req/30s
+#ENV VCL_FILE /etc/varnish/default.vcl
+#ENV GRACE_TTL 30s
+#ENV GRACE_MAX 1h
+
+ADD config/default.vcl.source /etc/varnish/default.vcl.source
+
+RUN apt-get update && apt-get clean
+RUN apt-get install \
+    git wget nano \
+    autotools-dev \
+    libpcre3-dev \
+    libtool -y
+# RUN ldconfig
+
+##
+## yeah .. this stuff doesnt "just" work with v6 - need to work it out/
+##
+##
+
+# Create a runit entry for your app
+RUN mkdir -p /etc/service/varnish
+#ADD bin/reload.sh /etc/service/varnish/reload
+ADD bin/run.sh /etc/service/varnish/run
+#RUN chown root /etc/service/varnish/reload
+RUN chown root /etc/service/varnish/run
+#RUN chmod +x /etc/service/varnish/reload
+RUN chmod +x /etc/service/varnish/run
+#RUN chmod 777 /etc/container_environment
+
+# Clean up APT when done
+#RUN apt-get clean && rm -rf /var/lib/apt/lists/* /tmp/* /var/tmp/*
+
+EXPOSE 8080
+EXPOSE 6083
+
+CMD ["/sbin/my_init"]

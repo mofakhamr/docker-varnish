@@ -1,0 +1,25 @@
+version: '2'
+services:
+
+
+
+
+
+
+
+  varnish:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:80"
+#    depends_on:
+#      - nginx
+#    links:
+#      - nginx
+#    volumes:
+#      - ./default.vcl:/etc/varnish/default.vcl
+    restart: unless-stopped
+    environment:
+      BACKEND_PORT_80_TCP_ADDR: 172.17.0.1
+      BACKEND_ENV_PORT: 80
